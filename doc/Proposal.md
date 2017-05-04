@@ -33,9 +33,9 @@ include "opentracing.vcl";
 
 sub vcl_recv {
   # `opentracing_trace_request` is a function exposed by the Varnish C++ module.
-  # It enables tracing for the given request. In the C++ code, this will allocate 
-  # memory to keep track of the request's span and inject it's context into the
-  # request headers.
+  # It enables tracing for the given request. In the C++ code, this would 
+  # allocate memory to keep track of the request's span and inject it's context
+  # into the request headers.
   opentracing_trace_request(req);
 
   # Additionally, the module would also expose commands to manipulate span tags
@@ -80,7 +80,7 @@ sub vcl_hit {
 ```
 
 Unfortunately, I don't think there's any way from VCL to execute commands after
-a request has been serviced, so figuring out when to end the request span is
+a request has been serviced, so figuring out when to finish the request span is
 tricky; though, I believe it's possible by having the C++ module start a
 thread that periodically reads from the [Varnish Shared Memory
 Log](https://varnish-cache.org/docs/trunk/reference/vsm.html) (VSM) and finishs
