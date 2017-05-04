@@ -2,19 +2,18 @@ OpenTracing in Varnish
 ----------------------
 
 I think it's possible to enable OpenTracing in Varnish using a combination of a
-[module](https://varnish-cache.org/docs/trunk/reference/vmod.html), Varnish
+[modules](https://varnish-cache.org/docs/trunk/reference/vmod.html), Varnish
 Configuration Language (VCL) code, and monitoring of the shared memory log.
 Unlike nginx, Varnish modules don't provide much capability to set up callbacks
 that get executed when certain events around an HTTP request occur. Instead,
-their main purpose is to expose C functions that you can call from within VCL,
-but VCL allows you to set up event-driven code, so I think OpenTracing could be
-accomplished by writing a Varnish C++ module that links to the LightStep C++
-library and manages spans, and an OpenTracing VCL "library" (say
-opentracing.vcl) that a user would
+their main purpose is to expose C functions that you can call from within VCL;
+but VCL allows you to set up event-driven code, so you could write both a
+Varnish C++ module that links to the LightStep C++ library and manages spans,
+and an OpenTracing VCL "library" (say opentracing.vcl) that a user would
 [include](http://www.varnish-cache.org/docs/4.0/reference/vcl.html#include-statement)
-in their varnish config if they wanted to enable OpenTracing.
+in their varnish config.
 
-VCL allows you execute event driven code by defining certain built-in subroutines.
+In VCL, you execute event driven code by defining certain built-in subroutines.
 For example, you could write
 
 ```vcl
@@ -34,16 +33,13 @@ include "opentracing.vcl";
 
 sub vcl_recv {
   # `opentracing_trace_request` is a function exposed by the Varnish C++ module.
-  # It enables tracing for the given request. Alternatively, you might enable
-  # it for all modules by including something like
-  #    include "opentracing-all.vcl"
-  # that defines this subroutine. In the C++ code, this will allocate memory to
-  # keep track of the request's span and inject it's context into the request
-  # headers.
+  # It enables tracing for the given request. In the C++ code, this will allocate 
+  # memory to keep track of the request's span and inject it's context into the
+  # request headers.
   opentracing_trace_request(req);
 
-  # Additionally, the would also expose commands to manipulate span tags and
-  # log data.
+  # Additionally, the module would also expose commands to manipulate span tags
+  # and log data.
   opentracing_tag(req, "abc", "123");
 }
 ```
@@ -85,11 +81,11 @@ sub vcl_hit {
 
 Unfortunately, I don't think there's any way from VCL to execute commands after
 a request has been serviced, so figuring out when to end the request span is
-tricky; though, I believe it's possible to do by having the C++ module start a
-thread that periodically reads from the Varnish [Shared Memory
+tricky; though, I believe it's possible by having the C++ module start a
+thread that periodically reads from the [Varnish Shared Memory
 Log](https://varnish-cache.org/docs/trunk/reference/vsm.html) (VSM) and finishs
 spans when it detects that they've been logged, using the logged timestamps to
 infer the finish time. VSM uses a [circular
 buffer](https://info.varnish-software.com/blog/varnish-shared-memory-log-errors-and-solutions)
 and will write over old entries, so you'd want this thread to read often enough
-that it won't lose many records, while handling the case when it does somehow.
+that it wouldn't lose many records, while handling the case when it does.
