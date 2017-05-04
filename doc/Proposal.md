@@ -1,7 +1,7 @@
 OpenTracing in Varnish
 ----------------------
 
-I think it's possible to enable OpenTracing in Varnish using a combination of a
+I think it's possible to enable OpenTracing in Varnish using a combination of
 [modules](https://varnish-cache.org/docs/trunk/reference/vmod.html), Varnish
 Configuration Language (VCL) code, and monitoring of the shared memory log.
 Unlike nginx, Varnish modules don't provide much capability to set up callbacks
