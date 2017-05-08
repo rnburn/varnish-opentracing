@@ -79,13 +79,9 @@ sub vcl_hit {
 ...
 ```
 
-Unfortunately, I don't think there's any way from VCL to execute commands after
-a request has been serviced, so figuring out when to finish the request span is
-tricky; though, I believe it's possible by having the C++ module start a
-thread that periodically reads from the [Varnish Shared Memory
-Log](https://varnish-cache.org/docs/trunk/reference/vsm.html) (VSM) and finishs
-spans when it detects that they've been logged, using the logged timestamps to
-infer the finish time. VSM uses a [circular
-buffer](https://info.varnish-software.com/blog/varnish-shared-memory-log-errors-and-solutions)
-and will write over old entries, so you'd want this thread to read often enough
-that it wouldn't lose many records, while handling the case when it does.
+There's no subroutine from VCL that lets you invoke a module function when a
+request is finished, so use either a [VMOD
+PRIV_TASK](https://www.varnish-cache.org/lists/pipermail/varnish-misc/2017-May/025891.html)
+or set up a
+[callback](https://www.varnish-cache.org/lists/pipermail/varnish-misc/2017-May/025895.html)
+on the shared memory log to finish the request spans.
