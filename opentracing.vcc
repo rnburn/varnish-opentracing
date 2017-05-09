@@ -1,0 +1,2 @@
+$Module opentracing 3 OpenTracing VMOD
+$Function VOID init_tracer(STRING_LIST)
