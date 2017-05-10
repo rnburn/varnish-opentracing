@@ -1,0 +1,2 @@
+$Module opentracing 3 OpenTracing VMOD
+$Function VOID tag(STRING, STRING)

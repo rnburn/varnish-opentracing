@@ -1,0 +1,7 @@
+$Module lightstep 3 LightStep VMOD
+$Function VOID collector_host(STRING)
+$Function VOID collector_encryption(STRING)
+$Function VOID collector_port(INT)
+$Function VOID component_name(STRING)
+$Function VOID access_token(STRING)
+$Function VOID init_tracer()

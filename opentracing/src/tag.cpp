@@ -3,6 +3,6 @@ extern "C" {
 #include <varnish/vcl.h>
 #include <varnish/vrt.h>
 
-VCL_VOID vmod_init_tracer(VRT_CTX, const char*, ...) {
+VCL_VOID vmod_tag(VRT_CTX, VCL_STRING, VCL_STRING) {
 }
 }

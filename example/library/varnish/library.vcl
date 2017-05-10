@@ -1,9 +1,11 @@
 vcl 4.0;
 
 import opentracing;
+import lightstep;
 
 sub vcl_init {
-  opentracing.init_tracer("abc123");
+  lightstep.access_token("abc123");
+  lightstep.init_tracer();
 }
 
 backend default {

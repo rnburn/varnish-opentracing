@@ -186,7 +186,7 @@ macro(declare_vmod)
         message(FATAL_ERROR "declare_vmod, missing expected argument: SOURCES")
     endif(NOT VMOD_SOURCES)
     add_custom_command(
-        OUTPUT "${PROJECT_BINARY_DIR}/vcc_if.c" "${PROJECT_BINARY_DIR}/vcc_if.h"
+        OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/vcc_if.c" "${CMAKE_CURRENT_BINARY_DIR}/vcc_if.h"
         COMMAND ${PYTHON_EXECUTABLE} ${${VARNISHAPI_PUBLIC_VAR_NS}_VMODTOOL} ${VMOD_VCC}
         DEPENDS ${VMOD_VCC}
     )
@@ -196,8 +196,8 @@ macro(declare_vmod)
 #         DEPENDS vcc_if.h vcc_if.c
 #     )
 #     add_dependencies(${VMOD_NAME} "${VMOD_NAME}_vcc_if")
-    list(APPEND VMOD_SOURCES "${PROJECT_BINARY_DIR}/vcc_if.c")
-    list(APPEND VMOD_SOURCES "${PROJECT_BINARY_DIR}/vcc_if.h")
+    list(APPEND VMOD_SOURCES "${CMAKE_CURRENT_BINARY_DIR}/vcc_if.c")
+    list(APPEND VMOD_SOURCES "${CMAKE_CURRENT_BINARY_DIR}/vcc_if.h")
     add_library(${VMOD_NAME} SHARED ${VMOD_SOURCES})
     if (APPLE)
       set_property(TARGET ${VMOD_NAME} PROPERTY OUTPUT_NAME "${VMOD_NAME}.so")
@@ -208,7 +208,7 @@ macro(declare_vmod)
     endif(VMOD_ADDITIONNAL_LIBRARIES)
     set(VMOD_INCLUDE_DIRECTORIES )
     list(APPEND VMOD_INCLUDE_DIRECTORIES ${PROJECT_SOURCE_DIR})
-    list(APPEND VMOD_INCLUDE_DIRECTORIES ${PROJECT_BINARY_DIR})
+    list(APPEND VMOD_INCLUDE_DIRECTORIES ${CMAKE_CURRENT_BINARY_DIR})
 #     if(DEFINED ${VARNISHAPI_PUBLIC_VAR_NS}_SOURCE_DIR)
 #         list(APPEND VMOD_INCLUDE_DIRECTORIES "${${VARNISHAPI_PUBLIC_VAR_NS}_SOURCE_DIR}/include")
 #     endif(DEFINED ${VARNISHAPI_PUBLIC_VAR_NS}_SOURCE_DIR)
