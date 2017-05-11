@@ -12,6 +12,7 @@ VCL_VOID vmod_trace(VRT_CTX, struct vmod_priv* trace_context);
 
 static void finish_trace(void* ctx_) {
   auto ctx = static_cast<vrt_ctx*>(ctx_);
+  /* std::cout << "url = " << VRT_r_req_url(ctx) << "\n"; */
   std::cout << "finishing request...\n";
 }
 

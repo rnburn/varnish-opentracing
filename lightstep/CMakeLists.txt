@@ -4,4 +4,5 @@ declare_vmod(
   NAME lightstep
   VCC ${CMAKE_CURRENT_SOURCE_DIR}/lightstep.vcc
   SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/lightstep.cpp
+  ADDITIONNAL_LIBRARIES ${LIGHTSTEP_LIBRARIES}
 )

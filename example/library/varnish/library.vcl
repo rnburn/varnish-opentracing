@@ -4,7 +4,8 @@ import opentracing;
 import lightstep;
 
 sub vcl_init {
-  lightstep.access_token("abc123");
+  include "lightstep_access_token_params";
+  lightstep.component_name("library");
   lightstep.init_tracer();
 }
 

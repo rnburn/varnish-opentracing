@@ -18,5 +18,6 @@ for i in {1..1}; do
   echo $! >> $DATA_ROOT/backend_pids
 done
 
-varnishd -F -a localhost:8080 -f varnish/library.vcl -n $VARNISH_ROOT&
+echo "lightstep.access_token(\"$LIGHTSTEP_ACCESS_TOKEN\");" > varnish/lightstep_access_token_params
+varnishd -F -a localhost:8080 -p vcl_dir=$PWD/varnish -f varnish/library.vcl -n $VARNISH_ROOT&
 echo $! > $DATA_ROOT/varnish_pids
