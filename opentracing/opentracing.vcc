@@ -1,2 +1,3 @@
 $Module opentracing 3 OpenTracing VMOD
 $Function VOID tag(STRING, STRING)
+$Function VOID trace(PRIV_TOP)

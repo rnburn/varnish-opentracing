@@ -8,6 +8,10 @@ sub vcl_init {
   lightstep.init_tracer();
 }
 
+sub vcl_recv {
+  opentracing.trace();
+}
+
 backend default {
   .host = "127.0.0.1";
   .port = "3001";

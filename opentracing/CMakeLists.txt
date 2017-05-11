@@ -1,7 +1,11 @@
+find_library(VARNISHAPI_LIBRARY varnishapi)
+
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config.h.in ${CMAKE_CURRENT_BINARY_DIR}/config.h)
 declare_vmod(
   INSTALL
   NAME opentracing
   VCC ${CMAKE_CURRENT_SOURCE_DIR}/opentracing.vcc
   SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/tag.cpp
+          ${CMAKE_CURRENT_SOURCE_DIR}/src/trace.cpp
+  ADDITIONNAL_LIBRARIES ${VARNISHAPI_LIBRARY}
 )
