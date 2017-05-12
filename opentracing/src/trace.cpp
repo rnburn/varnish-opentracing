@@ -19,7 +19,7 @@ static void finish_top_request(void* tracing_context_) {
       static_cast<TopRequestTracingContext*>(tracing_context_);
   // How do I figure out if the request resulted in an error or not? Running 
   // something like
-  //      VRT_r_obj_status(tracing_context.ctx)
+  //      VRT_r_obj_status(tracing_context->ctx)
   // won't work because many of the varnish request's resources have already
   // been cleaned up.
   tracing_context->span.Finish();
