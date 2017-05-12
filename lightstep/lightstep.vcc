@@ -1,0 +1,8 @@
+$Module lightstep 3 LightStep VMOD
+$Event lightstep_event
+$Function VOID collector_host(PRIV_VCL, STRING)
+$Function VOID collector_encryption(PRIV_VCL, STRING)
+$Function VOID collector_port(PRIV_VCL, INT)
+$Function VOID component_name(PRIV_VCL, STRING)
+$Function VOID access_token(PRIV_VCL, STRING)
+$Function VOID init_tracer(PRIV_VCL)
