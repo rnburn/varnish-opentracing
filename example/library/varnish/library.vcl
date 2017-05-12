@@ -1,7 +1,7 @@
 vcl 4.0;
 
-import opentracing;
 import lightstep;
+import opentracing;
 
 sub vcl_init {
   include "lightstep_access_token_params";
@@ -10,7 +10,11 @@ sub vcl_init {
 }
 
 sub vcl_recv {
-  opentracing.trace();
+  opentracing.trace_request();
+}
+
+sub vcl_backend_fetch {
+  opentracing.trace_backend_request();
 }
 
 backend default {

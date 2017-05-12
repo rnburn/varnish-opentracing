@@ -8,5 +8,5 @@ declare_vmod(
   SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/tag.cpp
           ${CMAKE_CURRENT_SOURCE_DIR}/src/trace.cpp
   ADDITIONNAL_LIBRARIES ${VARNISHAPI_LIBRARY}
-                        ${LIGHTSTEP_LIBRARIES}
+    ${LIGHTSTEP_CORE_CXX11_LIB}
 )
