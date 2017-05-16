@@ -14,8 +14,12 @@ if (typeof program.port === 'undefined') {
 
 const app = express();
 
+app.get('/header.html', (req, res) => {
+  res.send('Books are great!');
+});
+
 app.get('/', (req, res) => {
-  res.send('Hello, hello');
+  res.send('<html><body><esi:include src="/header.html"/></body></html>');
 });
 
 app.listen(program.port,

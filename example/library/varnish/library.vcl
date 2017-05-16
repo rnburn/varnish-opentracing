@@ -17,6 +17,10 @@ sub vcl_backend_fetch {
   opentracing.trace_backend_request();
 }
 
+sub vcl_backend_response {
+  set beresp.do_esi = true;
+}
+
 backend default {
   .host = "127.0.0.1";
   .port = "3001";

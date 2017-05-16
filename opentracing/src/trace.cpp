@@ -29,6 +29,8 @@ static void finish_top_request(void* tracing_context_) {
 extern "C" VCL_VOID vmod_trace_request(VRT_CTX,
                                        struct vmod_priv* top_request_context) {
   std::cout << "tracing request ...\n";
+  std::cout << "recv: ctx->sp = " << ctx->sp << "\n";
+  std::cout << "top: " << top_request_context << "\n";
   auto tracer = lightstep::Tracer::Global();
   auto tracing_context = new TopRequestTracingContext{};
   tracing_context->span = tracer.StartSpan(VRT_r_req_url(ctx));
@@ -40,6 +42,7 @@ extern "C" VCL_VOID vmod_trace_request(VRT_CTX,
 
 extern "C" VCL_VOID vmod_trace_backend_request(VRT_CTX) {
   std::cout << "tracing backend request ...\n";
+  std::cout << "fetch: ctx->sp = " << ctx->sp << "\n";
   // TODO: Inject the span's context into the backend request headers so that
   // spans created from the backend can reference it.
   //    tracer.Inject(tracing_context->span.context(),
