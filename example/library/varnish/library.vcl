@@ -11,9 +11,11 @@ sub vcl_init {
 
 sub vcl_recv {
   opentracing.trace_request();
+  opentracing.operation_name(req.url);
 }
 
 sub vcl_backend_response {
+  opentracing.operation_name(bereq.url);
   set beresp.do_esi = true;
 }
 

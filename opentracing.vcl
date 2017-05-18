@@ -9,3 +9,19 @@ sub vcl_recv {
 sub vcl_backend_fetch {
   opentracing.trace_backend_request();
 }
+
+sub vcl_backend_response {
+  opentracing.status_code(beresp.status);
+}
+
+sub vcl_backend_error {
+  opentracing.status_code(beresp.status);
+}
+
+sub vcl_deliver {
+  opentracing.status_code(resp.status);
+}
+
+sub vcl_synth {
+  opentracing.status_code(resp.status);
+}
