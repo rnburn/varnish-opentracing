@@ -1,5 +1,6 @@
 #include "opentracing_request_context.h"
 #include <cinttypes>
+#include <cassert>
 
 static const char* const kOpenTracingContextHeaderKey =
     "\023ot-varnish-context:";
@@ -11,6 +12,20 @@ void finalize_opentracing_request_context(void* context) {
   auto tracing_context = static_cast<OpenTracingRequestContext*>(context);
   tracing_context->span.Finish();
   delete tracing_context;
+}
+
+//------------------------------------------------------------------------------
+// get_opentracing_request_context
+//------------------------------------------------------------------------------
+OpenTracingRequestContext& get_opentracing_request_context(vmod_priv* priv) {
+  if (priv->priv) {
+    assert(priv->free);
+    return *static_cast<OpenTracingRequestContext*>(priv->priv);
+  }
+  auto tracing_context = new OpenTracingRequestContext{};
+  priv->priv = tracing_context;
+  priv->free = finalize_opentracing_request_context;
+  return *tracing_context;
 }
 
 //------------------------------------------------------------------------------

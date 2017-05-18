@@ -15,6 +15,11 @@ struct OpenTracingRequestContext {
 };
 
 //------------------------------------------------------------------------------
+// get_opentracing_request_context
+//------------------------------------------------------------------------------
+OpenTracingRequestContext& get_opentracing_request_context(vmod_priv* priv);
+
+//------------------------------------------------------------------------------
 // finalize_opentracing_request_context
 //------------------------------------------------------------------------------
 void finalize_opentracing_request_context(void* context);
