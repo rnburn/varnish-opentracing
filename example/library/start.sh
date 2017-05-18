@@ -18,6 +18,12 @@ for i in {1..1}; do
   echo $! >> $DATA_ROOT/backend_pids
 done
 
-echo "lightstep.access_token(\"$LIGHTSTEP_ACCESS_TOKEN\");" > varnish/lightstep_access_token_params
-varnishd -F -a localhost:8080 -p vcl_dir=$PWD/varnish -f varnish/library.vcl -n $VARNISH_ROOT&
+cp varnish/library.vcl $VARNISH_ROOT/library.vcl
+ENVS=`printenv`
+for env in $ENVS
+do
+  IFS== read name value <<< "$env"
+  sed -i -e "s|\${${name}}|${value}|g" $VARNISH_ROOT/library.vcl
+done
+varnishd -F -a localhost:8080 -p vcc_allow_inline_c=on -p vcl_dir=$PWD/../../ -f $VARNISH_ROOT/library.vcl -n $VARNISH_ROOT&
 echo $! > $DATA_ROOT/varnish_pids

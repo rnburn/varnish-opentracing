@@ -1,20 +1,16 @@
 vcl 4.0;
 
+include "opentracing.vcl";
 import lightstep;
-import opentracing;
 
 sub vcl_init {
-  include "lightstep_access_token_params";
+  lightstep.access_token("${LIGHTSTEP_ACCESS_TOKEN}");
   lightstep.component_name("library");
   lightstep.init_tracer();
 }
 
 sub vcl_recv {
   opentracing.trace_request();
-}
-
-sub vcl_backend_fetch {
-  opentracing.trace_backend_request();
 }
 
 sub vcl_backend_response {
