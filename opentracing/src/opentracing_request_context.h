@@ -11,13 +11,7 @@ extern "C" {
 //------------------------------------------------------------------------------
 struct OpenTracingRequestContext {
   lightstep::Span span;
-  std::string operation_name;
 };
-
-//------------------------------------------------------------------------------
-// get_opentracing_request_context
-//------------------------------------------------------------------------------
-OpenTracingRequestContext& get_opentracing_request_context(vmod_priv* priv);
 
 //------------------------------------------------------------------------------
 // finalize_opentracing_request_context

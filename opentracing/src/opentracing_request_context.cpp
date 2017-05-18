@@ -15,20 +15,6 @@ void finalize_opentracing_request_context(void* context) {
 }
 
 //------------------------------------------------------------------------------
-// get_opentracing_request_context
-//------------------------------------------------------------------------------
-OpenTracingRequestContext& get_opentracing_request_context(vmod_priv* priv) {
-  if (priv->priv) {
-    assert(priv->free);
-    return *static_cast<OpenTracingRequestContext*>(priv->priv);
-  }
-  auto tracing_context = new OpenTracingRequestContext{};
-  priv->priv = tracing_context;
-  priv->free = finalize_opentracing_request_context;
-  return *tracing_context;
-}
-
-//------------------------------------------------------------------------------
 // pass_opentracing_request_context_through_header
 //------------------------------------------------------------------------------
 void pass_opentracing_request_context_through_header(

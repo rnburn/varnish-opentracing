@@ -25,3 +25,11 @@ sub vcl_deliver {
 sub vcl_synth {
   opentracing.status_code(resp.status);
 }
+
+sub vcl_hit {
+  opentracing.tag("varnish.cache", "hit");
+}
+
+sub vcl_miss {
+  opentracing.tag("varnish.cache", "miss");
+}
