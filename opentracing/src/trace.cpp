@@ -22,6 +22,9 @@ extern "C" VCL_VOID vmod_trace_request(VRT_CTX, struct vmod_priv *request_priv,
   if (request_priv->priv)
     return;
 
+  // TODO: Extract any context from the request's headers. There doesn't seem to
+  // be any API exposed to VMODs to iterate through all the headers so not sure
+  // the best way to do this.
   std::cout << "tracing request ...\n";
   auto tracer = lightstep::Tracer::Global();
   auto tracing_context = new OpenTracingRequestContext{};
