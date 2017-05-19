@@ -34,7 +34,7 @@ extern "C" VCL_VOID vmod_trace_request(VRT_CTX, struct vmod_priv *request_priv,
   assert(!request_priv->priv && !request_priv->free);
   if (ctx->http_req != ctx->http_req_top && top_request_priv->priv) {
     auto parent_span_context =
-        reinterpret_cast<OpenTracingRequestContext *>(top_request_priv->priv)
+        static_cast<OpenTracingRequestContext *>(top_request_priv->priv)
             ->span.context();
     tracing_context->span = tracer.StartSpan(
         operation_name,
