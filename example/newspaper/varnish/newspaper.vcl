@@ -5,7 +5,7 @@ import lightstep;
 
 sub vcl_init {
   lightstep.access_token("${LIGHTSTEP_ACCESS_TOKEN}");
-  lightstep.component_name("library");
+  lightstep.component_name("newspaper");
   lightstep.init_tracer();
 }
 

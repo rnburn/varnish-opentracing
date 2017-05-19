@@ -5,7 +5,7 @@ then
   exit -1
 fi
 
-DATA_ROOT=$PWD/library-data
+DATA_ROOT=$PWD/newspaper-data
 VARNISH_ROOT=$DATA_ROOT/varnish
 
 mkdir -p $VARNISH_ROOT
@@ -18,12 +18,12 @@ for i in {1..1}; do
   echo $! >> $DATA_ROOT/backend_pids
 done
 
-cp varnish/library.vcl $VARNISH_ROOT/library.vcl
+cp varnish/newspaper.vcl $VARNISH_ROOT/newspaper.vcl
 ENVS=`printenv`
 for env in $ENVS
 do
   IFS== read name value <<< "$env"
-  sed -i -e "s|\${${name}}|${value}|g" $VARNISH_ROOT/library.vcl
+  sed -i -e "s|\${${name}}|${value}|g" $VARNISH_ROOT/newspaper.vcl
 done
-varnishd -F -a localhost:8080 -p vcc_allow_inline_c=on -p vcl_dir=$PWD/../../ -f $VARNISH_ROOT/library.vcl -n $VARNISH_ROOT&
+varnishd -F -a localhost:8080 -p vcc_allow_inline_c=on -p vcl_dir=$PWD/../../ -f $VARNISH_ROOT/newspaper.vcl -n $VARNISH_ROOT&
 echo $! > $DATA_ROOT/varnish_pids

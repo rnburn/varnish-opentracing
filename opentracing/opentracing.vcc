@@ -1,4 +1,6 @@
 $Module opentracing 3 OpenTracing VMOD
-$Function VOID tag(STRING, STRING)
-$Function VOID trace_backend_request()
-$Function VOID trace_request(PRIV_TOP)
+$Function VOID trace_request(PRIV_TASK, PRIV_TOP)
+$Function VOID trace_backend_request(PRIV_TASK)
+$Function VOID operation_name(PRIV_TASK, STRING_LIST)
+$Function VOID tag(PRIV_TASK, STRING, STRING_LIST)
+$Function VOID status_code(PRIV_TASK, INT)
