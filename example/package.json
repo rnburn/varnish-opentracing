@@ -12,7 +12,7 @@
     "lightstep-tracer": "^0.20.3",
     "lodash": "^4.17.4",
     "opentracing": "^0.13.0",
-    "opentracing-tracedpromise": "^1.0.2",
+    "opentracing-tracedpromise": "git+https://github.com/opentracing-contrib/javascript-tracedpromise.git",
     "pug": "^2.0.0-beta.12",
     "request": "^2.81.0",
     "sqlite3": "^3.1.8",

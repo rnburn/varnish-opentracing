@@ -11,11 +11,28 @@ sub vcl_init {
 
 sub vcl_recv {
   opentracing.trace_request();
-  opentracing.operation_name(req.url);
+  if (req.url ~ "^/article") {
+    opentracing.operation_name("/article");
+  } else {
+    opentracing.operation_name(req.url);
+  }
+  return (hash);
+}
+
+sub vcl_backend_fetch {
+  if (bereq.url ~ "^/article") {
+    opentracing.operation_name("article");
+  } else {
+    opentracing.operation_name(bereq.url);
+  }
 }
 
 sub vcl_backend_response {
-  opentracing.operation_name(bereq.url);
+  if (bereq.url ~ "^/article") {
+    set beresp.ttl = 1d;
+  } else {
+    set beresp.ttl = 5s;
+  }
   set beresp.do_esi = true;
 }
 

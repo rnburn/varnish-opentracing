@@ -88,10 +88,6 @@ function selectArticle(span, id) {
   });
 }
 
-app.get('/header.html', (req, res) => {
-  res.send('Books are great!');
-});
-
 app.get('/article/:articleId', (req, res) => {
   selectArticle(req.span, req.params.articleId)
       .then(
@@ -102,7 +98,7 @@ app.get('/article/:articleId', (req, res) => {
 });
 
 app.get('/', (req, res) => {
-  selectTopArticles(req).then(
+  selectTopArticles(req.span).then(
       (rows) => {
         res.render('index', {
           headlines: rows.map((row) => `/article/${row.uuid}`),
