@@ -38,14 +38,13 @@ app.get('/header.html', (req, res) => {
 app.get('/short/:articleId', (req, res) => {
   res.render(
       'snippet',
-      {headline: 'Escaped Bear!', short: 'Bear escapes from local zoo...'});
+      {headline : 'Escaped Bear!', short : 'Bear escapes from local zoo...'});
 });
 
 app.get('/', (req, res) => {
   res.render('index', {
     headlines: ['/short/1', '/short/2', '/short/3']
   });
-  // res.send('<html><body><esi:include src="/header.html"/></body></html>');
 });
 
 app.listen(program.port,
