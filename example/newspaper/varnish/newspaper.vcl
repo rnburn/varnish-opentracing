@@ -19,6 +19,11 @@ sub vcl_recv {
   return (hash);
 }
 
+sub vcl_hash {
+  hash_data(req.url);
+  return (lookup);
+}
+
 sub vcl_backend_fetch {
   if (bereq.url ~ "^/article") {
     opentracing.operation_name("article");
