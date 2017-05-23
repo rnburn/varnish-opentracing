@@ -12,11 +12,13 @@ mkdir -p $VARNISH_ROOT
 
 node node/setup.js --data_root $DATA_ROOT
 
-for i in {1..1}; do
+for i in {1..3}; do
   let port="3000+$i"
   node node/server.js --port $port --data_root $DATA_ROOT --access_token $LIGHTSTEP_ACCESS_TOKEN&
   echo $! >> $DATA_ROOT/backend_pids
 done
+node node/articleGenerator.js --data_root $DATA_ROOT&
+echo $! >> $DATA_ROOT/backend_pids
 
 cp varnish/newspaper.vcl $VARNISH_ROOT/newspaper.vcl
 ENVS=`printenv`

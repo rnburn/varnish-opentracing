@@ -136,10 +136,9 @@ function generateArticle() {
 
 function writeRandomArticle() {
   const article = generateArticle();
-  console.log(article);
   const id = uuid();
   const priority = _.random(5);
-  const expiration = ((new Date()).getTime() / 1000) + _.random(30);
+  const expiration = ((new Date()).getTime() / 1000) + _.random(50);
   const stmt = db.prepare('insert into articles values (?, ?, ?, ?, ?)');
   stmt.run(id, priority, expiration, article.headline, article.body, (err) => {
     if (err) {
