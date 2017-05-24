@@ -17,21 +17,3 @@ struct OpenTracingRequestContext {
 // finalize_opentracing_request_context
 //------------------------------------------------------------------------------
 void finalize_opentracing_request_context(void* context);
-
-//------------------------------------------------------------------------------
-// pass_opentracing_request_context_through_header
-//------------------------------------------------------------------------------
-void pass_opentracing_request_context_through_header(
-    const vrt_ctx* ctx, gethdr_e where,
-    OpenTracingRequestContext* tracing_context);
-
-//------------------------------------------------------------------------------
-// receive_opentracing_request_context_from_header
-//------------------------------------------------------------------------------
-/* Receives a pointer to the request's OpenTracingRequestContext through the
- * `ot-varnish-context` header. It's assumed that this header has been cleared
- * if the request has no OpenTracingRequestContext so that an invalid pointer
- * can't be passed in.
- */
-OpenTracingRequestContext* receive_opentracing_request_context_from_header(
-    const vrt_ctx* ctx, gethdr_e where);

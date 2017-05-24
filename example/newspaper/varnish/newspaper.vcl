@@ -19,12 +19,6 @@ backend node3 {
   .port = "3001";
 }
 
-/* director default_director round-robin { */
-/*   { .backend = node1; } */
-/*   { .backend = node2; } */
-/*   { .backend = node3; } */
-/* } */
-
 sub vcl_init {
   new default_director = directors.round_robin();
   default_director.add_backend(node1);
@@ -41,7 +35,7 @@ sub vcl_recv {
 
   opentracing.trace_request();
   if (req.url ~ "^/article") {
-    opentracing.operation_name("/article");
+    opentracing.operation_name("article");
   } else {
     opentracing.operation_name(req.url);
   }

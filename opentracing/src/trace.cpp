@@ -8,6 +8,10 @@ extern "C" {
 #include <varnish/vrt_obj.h>
 }
 
+lightstep::SpanContext extract_span_context(lightstep::Tracer &tracer,
+                                            const vrt_ctx *ctx,
+                                            gethdr_e where);
+
 void inject_span_context(lightstep::Tracer &tracer, const vrt_ctx *ctx,
                          gethdr_e where,
                          const lightstep::SpanContext &span_context);
@@ -52,8 +56,8 @@ extern "C" VCL_VOID vmod_trace_request(VRT_CTX, struct vmod_priv *request_priv,
   } else {
     tracing_context->span.SetTag("http.esi", true);
   }
-  pass_opentracing_request_context_through_header(ctx, HDR_REQ,
-                                                  tracing_context);
+  inject_span_context(
+      tracer, ctx, HDR_REQ, tracing_context->span.context());
 }
 
 //------------------------------------------------------------------------------
@@ -63,18 +67,17 @@ extern "C" VCL_VOID vmod_trace_backend_request(VRT_CTX,
                                                struct vmod_priv *request_priv) {
   std::cout << "tracing backend request ...\n";
   auto tracer = lightstep::Tracer::Global();
-  auto parent_tracing_context =
-      receive_opentracing_request_context_from_header(ctx, HDR_BEREQ);
+  auto parent_span_context =
+    extract_span_context(tracer, ctx, HDR_BEREQ);
 
   // Don't start a trace for the backend request if the client-side request
   // isn't traced.
-  if (!parent_tracing_context)
+  if (!parent_span_context.valid())
     return;
 
   auto tracing_context = new OpenTracingRequestContext{};
 
   const char *operation_name = "backend_request";
-  auto parent_span_context = parent_tracing_context->span.context();
   tracing_context->span = tracer.StartSpan(
       operation_name,
       {lightstep::SpanReference{lightstep::ChildOfRef, parent_span_context}});
