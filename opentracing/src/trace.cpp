@@ -26,6 +26,7 @@ extern "C" VCL_VOID vmod_trace_request(VRT_CTX, struct vmod_priv *request_priv,
   std::cout << "tracing request ...\n";
   auto tracer = lightstep::Tracer::Global();
   auto tracing_context = new OpenTracingRequestContext{};
+  tracing_context->req = ctx->req;
   std::string operation_name{"request"};
   // Check to see if this is a request generated from an ESI. If so, specify the
   // top-level request's span as the parent if present.
@@ -67,6 +68,7 @@ extern "C" VCL_VOID vmod_trace_request(VRT_CTX, struct vmod_priv *request_priv,
 extern "C" VCL_VOID vmod_trace_backend_request(VRT_CTX,
                                                struct vmod_priv *request_priv) {
   std::cout << "tracing backend request ...\n";
+  std::cout << "req = " << ctx->req << "\n";
   auto tracer = lightstep::Tracer::Global();
   auto parent_span_context =
     extract_span_context(tracer, ctx, HDR_BEREQ);
