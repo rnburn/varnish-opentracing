@@ -1,0 +1,9 @@
+html
+  head
+    title='The Brooklyn Noise'
+    style
+      include style.css
+  body
+    h1='The Brooklyn Noise'
+    each article in headlines
+      esi:include(src=article)
