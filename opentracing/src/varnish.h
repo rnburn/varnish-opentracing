@@ -9,6 +9,7 @@
 extern "C" {
 #endif
 #include <varnish/vrt.h>
+#include <varnish/vrt_obj.h>
 #ifdef __cplusplus
 } // extern "C"
 #endif

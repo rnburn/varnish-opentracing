@@ -1,12 +1,9 @@
 #include "opentracing_request_context.h"
+#include "varnish.h"
 #include <cassert>
 #include <cinttypes>
 #include <iostream>
 #include <lightstep/tracer.h>
-
-extern "C" {
-#include <varnish/vrt_obj.h>
-}
 
 lightstep::SpanContext extract_span_context(lightstep::Tracer &tracer,
                                             const vrt_ctx *ctx,
@@ -26,9 +23,6 @@ extern "C" VCL_VOID vmod_trace_request(VRT_CTX, struct vmod_priv *request_priv,
   if (request_priv->priv)
     return;
 
-  // TODO: Extract any context from the request's headers. There doesn't seem to
-  // be any API exposed to VMODs to iterate through all the headers so not sure
-  // the best way to do this.
   std::cout << "tracing request ...\n";
   auto tracer = lightstep::Tracer::Global();
   auto tracing_context = new OpenTracingRequestContext{};
@@ -44,7 +38,14 @@ extern "C" VCL_VOID vmod_trace_request(VRT_CTX, struct vmod_priv *request_priv,
         operation_name,
         {lightstep::SpanReference{lightstep::ChildOfRef, parent_span_context}});
   } else {
-    tracing_context->span = tracer.StartSpan(operation_name);
+    auto parent_span_context = extract_span_context(tracer, ctx, HDR_REQ);
+    if (parent_span_context.valid())
+      tracing_context->span =
+          tracer.StartSpan(operation_name,
+                           {lightstep::SpanReference{lightstep::ChildOfRef,
+                                                     parent_span_context}});
+    else
+      tracing_context->span = tracer.StartSpan(operation_name);
   }
 
   tracing_context->span.SetTag("component", "varnish");

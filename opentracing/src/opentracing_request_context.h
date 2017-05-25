@@ -1,10 +1,7 @@
 #pragma once
 
+#include "varnish.h"
 #include <lightstep/tracer.h>
-
-extern "C" {
-#include <varnish/vrt.h>
-}
 
 //------------------------------------------------------------------------------
 // OpenTracingRequestContext
