@@ -2,15 +2,9 @@
 #include <lightstep/tracer.h>
 #include <string>
 #include <utility>
+#include "varnish.h"
 
-extern "C" {
-#include <varnish/vrt.h>
-}
-
-const std::pair<std::string, const char *> kOpenTracingKeys[] = {
-    {"ot-tracer-traceid", "\022ot-tracer-traceid:"},
-    {"ot-tracer-spanid", "\021ot-tracer-spanid:"},
-    {"ot-tracer-sampled", "\022ot-tracer-sampled:"}};
+#include "varnishext.h"
 
 namespace {
 class VarnishHeaderCarrierReader : public lightstep::BasicCarrierReader {
@@ -20,19 +14,16 @@ public:
 
   void ForeachKey(
       std::function<void(const std::string &, const std::string &)> f) const {
-    // Not sure if varnish provides a way to iterate over all the header
-    // key-value pairs. See
-    //  https://stackoverflow.com/q/44122854
-    // so this function only looks up specific headers. This approach has the
-    // disadvantage of losing any baggage associated with the context.
-    std::string value;
-    for (auto &key : kOpenTracingKeys) {
-      gethdr_s gethdr = {where_, key.second};
-      auto result = VRT_GetHdr(ctx_, &gethdr);
-      if (result) {
-        value.assign(result);
-        f(key.first, value);
-      }
+    std::string key, value;
+    for (auto header = ot_header_begin(ctx_, where_);
+         !ot_header_is_end(&header); ot_header_next(&header)) {
+      key.assign(
+          header.key_first,
+          std::distance(header.key_first, header.key_last));
+      value.assign(
+          header.value_first,
+          std::distance(header.value_first, header.value_last));
+      f(key, value);
     }
   }
 
