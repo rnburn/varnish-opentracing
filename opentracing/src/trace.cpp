@@ -50,6 +50,10 @@ extern "C" VCL_VOID vmod_trace_request(VRT_CTX, struct vmod_priv *request_priv,
   }
 
   tracing_context->span.SetTag("component", "varnish");
+  tracing_context->span.SetTag("http.url", VRT_r_req_url(ctx));
+  tracing_context->span.SetTag("http.method", VRT_r_req_method(ctx));
+
+
   request_priv->priv = tracing_context;
   request_priv->free = finalize_opentracing_request_context;
   if (ctx->http_req == ctx->http_req_top) {
@@ -86,6 +90,9 @@ extern "C" VCL_VOID vmod_trace_backend_request(VRT_CTX,
       {lightstep::SpanReference{lightstep::ChildOfRef, parent_span_context}});
 
   tracing_context->span.SetTag("component", "varnish");
+  tracing_context->span.SetTag("http.url", VRT_r_bereq_url(ctx));
+  tracing_context->span.SetTag("http.method", VRT_r_bereq_method(ctx));
+
   request_priv->priv = tracing_context;
   request_priv->free = finalize_opentracing_request_context;
   inject_span_context(tracer, ctx, HDR_BEREQ, tracing_context->span.context());
