@@ -1,11 +1,8 @@
+#include "varnish.h"
 #include <lightstep/impl.h>
 #include <lightstep/tracer.h>
 #include <algorithm>
 #include <iostream>
-
-extern "C" {
-#include <varnish/vrt.h>
-}
 
 namespace {
 class VarnishHeaderCarrierWriter : public lightstep::BasicCarrierWriter {

@@ -6,7 +6,9 @@ declare_vmod(
   NAME opentracing
   VCC ${CMAKE_CURRENT_SOURCE_DIR}/opentracing.vcc
   SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/trace.cpp
+          ${CMAKE_CURRENT_SOURCE_DIR}/src/extract_span_context.cpp
           ${CMAKE_CURRENT_SOURCE_DIR}/src/inject_span_context.cpp
+          ${CMAKE_CURRENT_SOURCE_DIR}/src/varnishext.c
           ${CMAKE_CURRENT_SOURCE_DIR}/src/opentracing_request_context.cpp
   ADDITIONNAL_LIBRARIES ${VARNISHAPI_LIBRARY}
     ${LIGHTSTEP_CORE_CXX11_LIB}

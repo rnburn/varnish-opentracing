@@ -1,0 +1,1 @@
+exports.databaseName = 'newspaper.sqlite';
